@@ -1,0 +1,8 @@
+
+SELECT c.id, c.fullname, u.firstname,u.lastname, u.username, u.email, r.name as cours_role
+FROM mdl_course c
+JOIN mdl_context ct ON c.id = ct.instanceid
+JOIN mdl_role_assignments ra ON ra.contextid = ct.id
+JOIN mdl_user u ON u.id = ra.userid
+JOIN mdl_role r ON r.id = ra.roleid
+WHERE r.id = '3';
