@@ -6,3 +6,118 @@ JOIN mdl_role_assignments ra ON ra.contextid = ct.id
 JOIN mdl_user u ON u.id = ra.userid
 JOIN mdl_role r ON r.id = ra.roleid
 WHERE r.id = '3';
+
+
+SELECT DISTINCT u.firstname, u.lastname, u.email ,c.fullname, c.shortname, rl.name as Role
+FROM mdl_course AS c JOIN mdl_context AS ctx ON c.id = ctx.instanceid 
+JOIN mdl_role_assignments AS ra ON ra.contextid = ctx.id 
+JOIN mdl_user AS u ON u.id = ra.userid 
+JOIN mdl_role As rl ON rl.id = ra.roleid
+WHERE u.username = 'username'
+ORDER BY c.startdate ASC;
+
+
+
+--Get student enrolment count by course
+SELECT c.shortname, COUNT(DISTINCT u.id) AS Students
+FROM mdl_role_assignments AS ra
+JOIN mdl_context AS ctx ON ra.contextid = ctx.id AND ctx.contextlevel = 50
+JOIN mdl_user AS u ON u.id = ra.userid
+JOIN mdl_course AS c ON ctx.instanceid = c.id
+WHERE ra.roleid = 5
+AND c.shortname like '%2023%'
+GROUP BY c.shortname;
+
+
+
+SELECT COUNT(u.id) AS Students
+FROM mdl_role_assignments AS ra
+JOIN mdl_context AS ctx ON ra.contextid = ctx.id AND ctx.contextlevel = 50
+JOIN mdl_user AS u ON u.id = ra.userid
+JOIN mdl_course AS c ON ctx.instanceid = c.id
+--JOIN mdl_user_enrolments as ue on u.id = ue.userid
+--JOIN mdl_enrol  as e on e.id = ue.enrolid
+WHERE ra.roleid = 5
+AND c.shortname like '%2023%'
+--AND e.enrol like 'manual'
+
+
+select c.shortname, g.name, u.username
+from mdl_course as c
+inner join mdl_groups as g on c.id = g.courseid
+inner join mdl_groups_members as gm on gm.groupid = g.id 
+inner join mdl_user as u on gm.userid = u.id
+where c.shortname like '%2023%' --and c.shortname like 'PL100%'
+--group by c.shortname, g.name
+order by c.shortname, g.name;
+
+
+
+
+
+
+--Get student enrolment count by course
+SELECT c.shortname, COUNT(DISTINCT u.id) AS Students
+FROM mdl_role_assignments AS ra
+JOIN mdl_context AS ctx ON ra.contextid = ctx.id AND ctx.contextlevel = 50
+JOIN mdl_user AS u ON u.id = ra.userid
+JOIN mdl_course AS c ON ctx.instanceid = c.id
+WHERE ra.roleid = 5
+AND c.shortname like '%2023%'
+GROUP BY c.shortname;
+
+
+
+SELECT COUNT(u.id) AS Students
+FROM mdl_role_assignments AS ra
+JOIN mdl_context AS ctx ON ra.contextid = ctx.id AND ctx.contextlevel = 50
+JOIN mdl_user AS u ON u.id = ra.userid
+JOIN mdl_course AS c ON ctx.instanceid = c.id
+--JOIN mdl_user_enrolments as ue on u.id = ue.userid
+--JOIN mdl_enrol  as e on e.id = ue.enrolid
+WHERE ra.roleid = 5
+AND c.shortname like '%2023%'
+--AND e.enrol like 'manual'
+;
+
+select * from mdl_course;
+
+select * from mdl_groups_members;
+
+
+
+select c.shortname, g.name, u.username
+from mdl_course as c
+inner join mdl_groups as g on c.id = g.courseid
+inner join mdl_groups_members as gm on gm.groupid = g.id 
+inner join mdl_user as u on gm.userid = u.id
+where c.shortname like '%2023%' --and c.shortname like 'PL100%'
+--group by c.shortname, g.name
+order by c.shortname, g.name;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+
+
