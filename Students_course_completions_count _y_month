@@ -1,0 +1,24 @@
+SELECT 
+    c.fullname AS course_name,
+    SUM(CASE WHEN MONTH(FROM_UNIXTIME(cc.timecompleted)) = 1 THEN 1 ELSE 0 END) AS January,
+    SUM(CASE WHEN MONTH(FROM_UNIXTIME(cc.timecompleted)) = 2 THEN 1 ELSE 0 END) AS February,
+    SUM(CASE WHEN MONTH(FROM_UNIXTIME(cc.timecompleted)) = 3 THEN 1 ELSE 0 END) AS March,
+    SUM(CASE WHEN MONTH(FROM_UNIXTIME(cc.timecompleted)) = 4 THEN 1 ELSE 0 END) AS April,
+    SUM(CASE WHEN MONTH(FROM_UNIXTIME(cc.timecompleted)) = 5 THEN 1 ELSE 0 END) AS May,
+    SUM(CASE WHEN MONTH(FROM_UNIXTIME(cc.timecompleted)) = 6 THEN 1 ELSE 0 END) AS June,
+    SUM(CASE WHEN MONTH(FROM_UNIXTIME(cc.timecompleted)) = 7 THEN 1 ELSE 0 END) AS July,
+    SUM(CASE WHEN MONTH(FROM_UNIXTIME(cc.timecompleted)) = 8 THEN 1 ELSE 0 END) AS August,
+    SUM(CASE WHEN MONTH(FROM_UNIXTIME(cc.timecompleted)) = 9 THEN 1 ELSE 0 END) AS September,
+    SUM(CASE WHEN MONTH(FROM_UNIXTIME(cc.timecompleted)) = 10 THEN 1 ELSE 0 END) AS October,
+    SUM(CASE WHEN MONTH(FROM_UNIXTIME(cc.timecompleted)) = 11 THEN 1 ELSE 0 END) AS November,
+    SUM(CASE WHEN MONTH(FROM_UNIXTIME(cc.timecompleted)) = 12 THEN 1 ELSE 0 END) AS December,
+    SUM(1) AS total_completions
+FROM mdl_course c
+JOIN mdl_course_completions cc ON cc.course = c.id
+JOIN mdl_user u ON u.id = cc.userid
+WHERE cc.timecompleted IS NOT NULL  -- Only include completed courses
+  AND u.deleted = 0
+  AND c.visible = 1
+  AND YEAR(FROM_UNIXTIME(cc.timecompleted)) = YEAR(CURDATE())  -- Filter for the current year
+GROUP BY c.id
+ORDER BY c.id ASC;
