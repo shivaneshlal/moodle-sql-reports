@@ -1,0 +1,40 @@
+Oracle backup notes
+
+#Archive log mode must be enabled
+->sqlplus / as sysdba #log in to the sql
+->select log_mode from v$database;
+->shutdown immediate; #shutdown the database
+->startup mount;
+->alter database archivelog;
+->alter database open;
+# rman target /
+#Note the Databse info
+-database: PPRD (DBID=4026205691, not open)
+-> show all # list of all the parameters in the database
+#Ensure that auto backup is on
+->CONFIGURE CONTROLFILE AUTOBACKUP ON;
+#Configure the BACKUP location
+->CONFIGURE CHANNEL DEVICE TYPE DISK FORMAT='/u01/DB-BackUp/PPRD/%U';
+#Run the DB Backup Command
+->backup database;
+#Note the Tag number after backup is compleated
+Data files Backup. piece handle=/u01/DB-BackUp/PPRD/01usnoop_1_1 tag=TAG20200403T161520
+comment=NONE
+control files and spfile Backup. piece handle=/u01/app/oracle/product/12.2.0/dbhome_1/dbs/c4026205691-20200403-00 comment=NONE
+#To restore the ->DATABASE should not be in open mode!
+->shutdown the databse.
+->SQL: startup mount;
+->list backup; #command lists the privous backup lists
+->list backup of database summary;
+->restore CONTROLFILE FROM /u01/app/oracle/product/12.2.0/dbhome_1/dbs/c-4026205691-
+20200403-00
+->restore database from tag TAG20200610T093714; -> TRNG ENV 10-06-20
+->recover database until cancel;
+->CANCLE;
+->alter database OPEN resetlogs;
+#Chck the status of the database;
+->select name, open_mode from v$database;
+->shutdown immediate; #shutdown the database
+->startup mount;
+->alter database noarchivelog;
+->ALTER DATABASE OPEN READ WRITE;
